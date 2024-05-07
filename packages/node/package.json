@@ -1,0 +1,29 @@
+{
+  "name": "node",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "L IN <linzb93@users.noreply.github.com>",
+  "homepage": "https://github.com/linzb93/utils#readme",
+  "license": "ISC",
+  "main": "lib/node.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmmirror.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linzb93/utils.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/node.test.js"
+  },
+  "bugs": {
+    "url": "https://github.com/linzb93/utils/issues"
+  }
+}

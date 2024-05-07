@@ -1,0 +1,31 @@
+{
+  "name": "browser",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "L IN <linzb93@users.noreply.github.com>",
+  "homepage": "https://github.com/linzb93/utils#readme",
+  "license": "ISC",
+  "main": "dist/browser.js",
+  "module": "dist/browser.module.js",
+  "directories": {
+    "lib": "dist",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmmirror.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linzb93/utils.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/browser.test.js"
+  },
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/linzb93/utils/issues"
+  }
+}
