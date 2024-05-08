@@ -1,5 +1,6 @@
 const path = require("path");
 const DtsBundlePlugin = require("@qiushaocloud/webpack-dts-bundle-plugin");
+const fs = require("fs");
 //
 module.exports = {
   entry: "./packages/core/lib/index.ts",
@@ -28,10 +29,26 @@ module.exports = {
     ],
   },
   plugins: [
-    new DtsBundlePlugin({
-      name: "@linzb93/util",
-      main: path.resolve(process.cwd(), "packages/core/lib/"),
-      out: path.resolve(process.cwd(), "packages/core/dist/index.d.ts"),
-    }),
+    new DtsBundlePlugin(
+      {
+        name: "@linzb93/util",
+        main: path.resolve(process.cwd(), "packages/core/lib/"),
+        out: path.resolve(process.cwd(), "packages/core/dist/index.d.ts"),
+      },
+      () => {},
+      () => {
+        // 合并完成后，移除原有的.d.ts文件
+        const dirs = fs.readdirSync(
+          path.resolve(process.cwd(), "packages/core/lib/")
+        );
+        dirs.forEach((dir) => {
+          if (dir.endsWith(".d.ts")) {
+            fs.unlinkSync(
+              path.resolve(process.cwd(), "packages/core/lib/", dir)
+            );
+          }
+        });
+      }
+    ),
   ],
 };

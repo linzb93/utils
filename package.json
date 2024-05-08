@@ -3,10 +3,11 @@
   "private": true,
   "scripts": {
     "test": "jest",
-    "build": "webpack",
-    "prepare": "husky"
+    "build": "webpack"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.24.5",
+    "@babel/preset-typescript": "^7.24.1",
     "@qiushaocloud/webpack-dts-bundle-plugin": "^1.0.2",
     "@types/jest": "^29.5.12",
     "@types/lodash-es": "^4.17.12",

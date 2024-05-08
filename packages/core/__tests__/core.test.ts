@@ -55,11 +55,11 @@ describe("补充连续的数", () => {
 });
 
 describe("延迟", () => {
-  it("延迟3秒", (done) => {
+  it("延迟2秒", (done) => {
     const startTime = new Date().getTime();
-    sleep(3000).then(() => {
+    sleep(2000).then(() => {
       const delta = new Date().getTime() - startTime;
-      expect(delta / 1000).toBeCloseTo(3, 2);
+      expect(delta / 1000).toBeCloseTo(2, 1);
       done();
     });
   });
