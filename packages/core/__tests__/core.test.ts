@@ -1,11 +1,12 @@
-const {
+import {
   isEmptyObject,
   fix0,
   isNumberHasMoreThan2Decimal,
   cutDecimalSegNumber,
   fixContinuousNumber,
   sleep,
-} = require("../../src/utils");
+}  from "../lib/index";
+// import "jest";
 // const validate = require('../../src/utils/validate');
 describe("是否为空对象", () => {
   it("是空对象", () => {
