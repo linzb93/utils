@@ -4,6 +4,7 @@
     "module": "ESNext",
     "declaration": true,
     "experimentalDecorators": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "moduleResolution": "Bundler"
   }
 }

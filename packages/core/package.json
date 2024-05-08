@@ -1,7 +1,7 @@
 {
   "name": "@linzb93/core",
   "version": "0.0.1",
-  "author": "L IN <linzb93@users.noreply.github.com>",
+  "author": "linzb93",
   "homepage": "https://github.com/linzb93/utils#readme",
   "license": "ISC",
   "main": "dist/index.js",

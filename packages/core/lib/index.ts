@@ -1,5 +1,5 @@
 import { validate } from "./validate";
-import { isNil } from "lodash-es";
+import { isNil, isInteger } from "lodash-es";
 
 /**
  * 判断是不是一个空的Object
@@ -128,4 +128,27 @@ export const sleep = (time: number): Promise<null> =>
       resolve(null);
     }, time);
   });
-export {validate};
+export { validate };
+
+export function binarySearch(
+  { start, end },
+  callback: (data: number) => number
+) {
+  if (!isInteger(start) || !isInteger(end) || start >= end) {
+    throw new Error("start 和 end 必须是正整数，且 start 的值要小于 end ");
+  }
+  let s = start;
+  let e = end;
+  while (Math.abs(s - e) > 1) {
+    const boolRet = callback(parseInt(((s + e) / 2).toString())) && callback(e);
+    if (!boolRet) {
+      s = parseInt(((s + e) / 2).toString());
+    } else {
+      e = parseInt(((s + e) / 2).toString());
+    }
+  }
+  if (callback(s)) {
+    return s;
+  }
+  return e;
+}
