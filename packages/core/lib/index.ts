@@ -130,6 +130,7 @@ export const sleep = (time: number): Promise<null> =>
   });
 export { validate };
 
+// 二分查找
 export function binarySearch(
   { start, end },
   callback: (data: number) => number
