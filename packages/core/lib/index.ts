@@ -128,3 +128,4 @@ export const sleep = (time: number): Promise<null> =>
       resolve(null);
     }, time);
   });
+export {validate};
