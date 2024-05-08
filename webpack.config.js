@@ -1,7 +1,8 @@
 const path = require("path");
 const DtsBundlePlugin = require("@qiushaocloud/webpack-dts-bundle-plugin");
 const fs = require("fs");
-//
+
+/** @type {import('webpack').Configuration} */
 module.exports = {
   entry: "./packages/core/lib/index.ts",
   output: {
