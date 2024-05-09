@@ -33,7 +33,7 @@ module.exports = {
     new DtsBundlePlugin(
       {
         name: "@linzb93/util",
-        main: path.resolve(process.cwd(), "packages/core/lib/"),
+        main: path.resolve(process.cwd(), "packages/core/lib"),
         out: path.resolve(process.cwd(), "packages/core/dist/index.d.ts"),
       },
       () => {},

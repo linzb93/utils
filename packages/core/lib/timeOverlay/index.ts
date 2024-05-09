@@ -37,7 +37,7 @@ function isTimeOverlay(timeList: TimeRange[]) {
  * @param timeList: [{startTime, endTime}]，
  * @param time: 形如'22:00'的
  */
-function validateTimeOverlay(timeList: TimeRange[]) {
+export function validateTimeOverlay(timeList: TimeRange[]) {
   for (let i = 0; i < timeList.length - 1; i++) {
     for (let j = i + 1; j < timeList.length; j++) {
       const target = [timeList[i], timeList[j]];
@@ -49,5 +49,3 @@ function validateTimeOverlay(timeList: TimeRange[]) {
   }
   return false;
 }
-
-export default validateTimeOverlay;

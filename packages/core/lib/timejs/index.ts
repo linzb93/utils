@@ -66,7 +66,7 @@ class TimeRange {
   }
 }
 
-export default function timejs(time: string) {
+export function timejs(time: string) {
   if (typeof time === "string" && time.includes("~")) {
     return new TimeRange(time);
   }

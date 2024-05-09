@@ -1,6 +1,6 @@
 interface IOption {
-  allText: string;
-  separator: string;
+  allText?: string;
+  separator?: string;
 }
 
 interface CircleItem {
@@ -15,10 +15,10 @@ interface CircleItem {
  * - {string} separator: 非连续日期分隔符，默认为“、”
  * @returns {string} '周一~周三、周四'
  */
-export default function formatWeekCircle(
+export function formatWeekCircle(
   circle: string[],
-  optionsParam: IOption
-) {
+  optionsParam?: IOption
+): string {
   const CIRCLES: CircleItem[] = [
     { name: "周一", id: 1 },
     { name: "周二", id: 2 },

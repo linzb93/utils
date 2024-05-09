@@ -14,7 +14,7 @@ interface Fn1Param {
  * @returns {Function} [callbacks.subscribe] - 进行中的回调
  * @returns {Function} [callbacks.then] - 完成的回调
  */
-export default (pEvent: Promise<any>, second: number): object => {
+export const fakeProgress = (pEvent: Promise<any>, second: number): object => {
   let progress = 0;
   const perStep = parseInt((100 / second).toString());
   const progressList = [0];
