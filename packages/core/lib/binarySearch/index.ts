@@ -4,36 +4,32 @@ export function binarySearch(
   {
     start,
     end,
-    desc = true,
+    callback
   }: {
     start: number;
     end: number;
-    desc: boolean; // 数据呈单调下降形式
-  },
-  callback: (data: number) => number
-) {
+    callback:(data: number) => boolean 
+  }
+):number {
   if (!isInteger(start) || !isInteger(end) || start >= end) {
     throw new Error("start 和 end 必须是正整数，且 start 的值要小于 end ");
   }
   let s = start;
   let e = end;
-  // 先写单调下降的
-  const rs = callback(s);
-  const re = callback(e);
-  if (rs) {
-    // 如果第一个就为true，那么全部的值都是为true了
-    return s;
-  }
-  if (!re) {
-    // 如果最后一个值都为false，那么全部的值都是为false了
-    return e;
+  let rs = callback(s);
+  let re = callback(e);
+  if (!!rs === !!re) {
+    // 所有值都相同，不用写了
+    return;
   }
   while (Math.abs(s - e) > 1) {
-    const boolRet = callback(parseInt(((s + e) / 2).toString())) && callback(e);
-    if (!boolRet) {
-      s = parseInt(((s + e) / 2).toString());
+    const middle = parseInt(((s + e) / 2).toString());
+    const middleRet = callback(middle);
+    if (!!middleRet === !!rs) {
+      // 当中间值和初始值相同时，去处理中间值到结束值的数据
+      s = middle;
     } else {
-      e = parseInt(((s + e) / 2).toString());
+      e = middle;
     }
   }
   if (callback(s)) {
