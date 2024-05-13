@@ -1,75 +1,63 @@
-import dayjs, { Dayjs } from "dayjs";
 
-class Time {
-  private time: Dayjs;
+
+class TimeCtor {
+  private timestamp: number;
+  static readonly formatReg = /^\d{2}\:\d{2}(:\d{2})?$/;
   /**
    * time format: xx:xx:xx
    * @constructor
    * @param {string} time 时间，可以是'HH:mm'格式的，也可以是'HH:mm:ss'格式的。
    */
   constructor(time: string) {
-    this.time = dayjs(time);
+    const { formatReg } = TimeCtor;
+    if (!formatReg.test(time)) {
+      throw new Error('时间格式不合法，请修改为HH:mm或HH:mm:ss格式的');
+    }
+    this.timestamp = this.getTimeStamp(time);
+  }
+  private getTimeStamp(time: string): number {
+    const { formatReg } = TimeCtor;
+    if (!formatReg.test(time)) {
+      throw new Error('时间格式不合法，请修改为HH:mm或HH:mm:ss格式的');
+    }
+    const seg = time.split(':').map(item => Number(item));
+    return (seg[0] * 3600 + seg[1] * 60 + (seg[2] || 0)) * 1000;
+  }
+  private compare(comparedTime: string, type: 1 | 2 | 3): boolean {
+    const cpTimeStamp = this.getTimeStamp(comparedTime);
+    if (type === 1) {
+      return this.timestamp < cpTimeStamp;
+    }
+    if (type === 2) {
+      return this.timestamp > cpTimeStamp;
+    }
+    return this.timestamp === cpTimeStamp;
   }
 
-  isBefore(comparedTime: string) {
-    const cpTimeSeg = comparedTime.split(":").map((item) => Number(item));
-    let timeSeg = [];
-    if (cpTimeSeg.length === 2) {
-      timeSeg = this.time
-        .format("HH:mm")
-        .split(":")
-        .map((item) => Number(item));
-    } else if (cpTimeSeg.length === 3) {
-      timeSeg = this.time
-        .format("HH:mm:ss")
-        .split(":")
-        .map((item) => Number(item));
-    }
-    if (timeSeg[0] < cpTimeSeg[0]) {
-      return true;
-    }
-    if (timeSeg[0] > cpTimeSeg[0]) {
-      return false;
-    }
-    if (timeSeg[1] < cpTimeSeg[1]) {
-      return true;
-    }
-    if (timeSeg[1] > cpTimeSeg[1]) {
-      return false;
-    }
-    return timeSeg[2] < cpTimeSeg[2];
+  isBefore(comparedTime: string): boolean {
+    return this.compare(comparedTime, 1);
   }
-}
 
-class TimeRange {
-  private startTime: string;
-  private endTime: string;
-  /**
-   * timeRange format: xx:xx:xx~xx:xx:xx
-   */
-  constructor(time: string) {
-    const [startTime, endTime] = time.split("~");
-    this.startTime = `${dayjs().format("YYYY-MM-DD")} ${startTime}:00`;
-    this.endTime = `${dayjs().format("YYYY-MM-DD")} ${endTime}:00`;
+  isAfter(comparedTime: string): boolean {
+    return this.compare(comparedTime, 2);
   }
-  isBefore(time: string) {
-    return dayjs(this.endTime).isBefore(time);
+  isSame(comparedTime: string): boolean {
+    return this.compare(comparedTime, 3);
   }
-  isInRange(time: string) {
-    return (
-      !dayjs(this.endTime).isBefore(time) &&
-      !dayjs(this.startTime).isAfter(time)
-    );
-  }
-  isAfter(time: string) {
-    return dayjs(this.startTime).isAfter(time);
+  isInRange(startTime: string, endTime: string): boolean {
+    const { formatReg } = TimeCtor;
+    if (!formatReg.test(startTime)) {
+      throw new Error('开始时间格式不合法，请修改为HH:mm或HH:mm:ss格式的');
+    }
+    if (!formatReg.test(endTime)) {
+      throw new Error('开始时间格式不合法，请修改为HH:mm或HH:mm:ss格式的');
+    }
+    const startTimeStamp = this.getTimeStamp(startTime);
+    const endTimeStamp = this.getTimeStamp(endTime);
+    return startTimeStamp <= this.timestamp && this.timestamp <= endTimeStamp;
   }
 }
 
 export function timejs(time: string) {
-  if (typeof time === "string" && time.includes("~")) {
-    return new TimeRange(time);
-  }
-  const retTime = time;
-  return new Time(retTime);
+  return new TimeCtor(time);
 }

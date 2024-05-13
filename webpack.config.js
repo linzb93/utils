@@ -25,7 +25,7 @@ module.exports = {
             },
           },
         ],
-        exclude: /node_modules/, // 排除node_modules目录
+        exclude: "./**/*.test.ts",
       },
     ],
   },
