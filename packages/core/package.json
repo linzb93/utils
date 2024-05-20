@@ -11,7 +11,7 @@
     "test": "__tests__"
   },
   "files": [
-    "lib"
+    "dist"
   ],
   "publishConfig": {
     "registry": "https://registry.npmmirror.com/"
@@ -21,7 +21,7 @@
     "url": "git+https://github.com/linzb93/utils.git"
   },
   "scripts": {
-    "test": "jest ."
+    "build": "tsc & vite build"
   },
   "bugs": {
     "url": "https://github.com/linzb93/utils/issues"

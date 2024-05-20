@@ -11,6 +11,5 @@
     "lib": ["ESNext", "dom"],
     "noEmit": true,
     "strict": true
-  },
-  "exclude": ["packages/**/*.test.ts"]
+  }
 }

@@ -21,7 +21,7 @@
     "url": "git+https://github.com/linzb93/utils.git"
   },
   "scripts": {
-    "test": "node ./__tests__/node.test.js"
+    "build": "tsc & vite build"
   },
   "bugs": {
     "url": "https://github.com/linzb93/utils/issues"

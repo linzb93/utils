@@ -4,7 +4,7 @@
   "scripts": {
     "pretest": "node scripts/checkNodeVersion",
     "test": "vitest",
-    "build": "tsc & vite build"
+    "build": "lerna run build"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",
