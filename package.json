@@ -4,15 +4,14 @@
   "scripts": {
     "pretest": "node scripts/checkNodeVersion",
     "test": "vitest",
-    "build": "vite"
+    "build": "tsc & vite build"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.24.5",
-    "@babel/preset-typescript": "^7.24.1",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^20.12.12",
     "husky": "^9.0.11",
     "lerna": "^6.0.3",
+    "typescript": "^5.4.5",
     "vitest": "^1.6.0"
   },
   "dependencies": {

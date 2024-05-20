@@ -1,14 +1,16 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ESNext",
     "module": "ESNext",
     "declaration": true,
     "experimentalDecorators": true,
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
+    "isolatedModules": true,
     "lib": ["ESNext", "dom"],
-    "paths": {
-      "dayjs": ["./node_modules/dayjs/dayjs.min.js"]
-    }
-  }
+    "noEmit": true,
+    "strict": true
+  },
+  "exclude": ["packages/**/*.test.ts"]
 }
