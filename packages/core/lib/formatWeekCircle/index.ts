@@ -44,8 +44,8 @@ export function formatWeekCircle(
       }
       return {};
     })
-    .sort((a: CircleItem, b: CircleItem) => {
-      return a.id > b.id ? 1 : -1;
+    .sort((a, b) => {
+      return (a as CircleItem).id > (b as CircleItem).id ? 1 : -1;
     }) as CircleItem[];
   let index = 0;
   const output = [];
