@@ -1,3 +1,4 @@
+import {describe, it, expect} from 'vitest';
 import { timejs } from "./index";
 
 describe("timejs", () => {

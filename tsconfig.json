@@ -5,7 +5,8 @@
     "declaration": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
-    "moduleResolution": "classic",
+    "moduleResolution": "node",
+    "lib": ["ESNext"],
     "paths": {
       "dayjs": ["./node_modules/dayjs/dayjs.min.js"]
     }

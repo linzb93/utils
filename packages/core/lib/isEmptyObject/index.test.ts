@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { isEmptyObject } from "./index";
 describe("isEmptyObject", () => {
   it("是空对象", () => {

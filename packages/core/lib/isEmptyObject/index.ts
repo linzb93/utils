@@ -1,3 +1,4 @@
+import { isPlainObject } from 'lodash-es'
 /**
  * 判断是不是一个空的Object
  * @param {any} obj 判断的参数
@@ -13,8 +14,11 @@
  * return false;
  */
 export const isEmptyObject = (obj: any): boolean => {
-    for (const key in obj) {
-      return false;
-    }
-    return true;
-  };
+  if (!isPlainObject(obj)) {
+    return false;
+  }
+  for (const key in obj) {
+    return false;
+  }
+  return true;
+};

@@ -1,3 +1,4 @@
+import {describe, it, expect} from 'vitest';
 import { cutDecimalSegNumber } from "./index";
 describe("cutDecimalSegNumber", () => {
   it("截断成功", () => {

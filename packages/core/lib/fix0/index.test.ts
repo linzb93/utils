@@ -1,3 +1,4 @@
+import {describe, it, expect} from 'vitest';
 import { fix0 } from "./index";
 describe("fix0", () => {
   it("需要补0", () => {

@@ -10,7 +10,7 @@ export function binarySearch(
     end: number;
     desc: boolean; // 数据呈单调下降形式
   },
-  callback: (data: number) => number
+  callback: (data: number) => boolean
 ) {
   if (!isInteger(start) || !isInteger(end) || start >= end) {
     throw new Error("start 和 end 必须是正整数，且 start 的值要小于 end ");

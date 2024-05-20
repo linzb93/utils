@@ -3,23 +3,16 @@
   "private": true,
   "scripts": {
     "pretest": "node scripts/checkNodeVersion",
-    "test": "jest",
-    "build": "webpack"
+    "test": "vitest",
+    "build": "vite"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.24.5",
     "@babel/preset-typescript": "^7.24.1",
-    "@qiushaocloud/webpack-dts-bundle-plugin": "^1.0.2",
-    "@types/jest": "^29.5.12",
     "@types/lodash-es": "^4.17.12",
     "husky": "^9.0.11",
-    "jest": "^29.7.0",
     "lerna": "^6.0.3",
-    "ts-jest": "^29.1.2",
-    "ts-loader": "^9.5.1",
-    "webpack": "^5.91.0",
-    "webpack-bundle-analyzer": "^4.10.2",
-    "webpack-cli": "^5.1.4"
+    "vitest": "^1.6.0"
   },
   "dependencies": {
     "dayjs": "^1.11.11",

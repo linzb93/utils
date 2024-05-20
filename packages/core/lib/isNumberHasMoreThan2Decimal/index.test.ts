@@ -1,3 +1,4 @@
+import {describe, it, expect} from 'vitest';
 import { isNumberHasMoreThan2Decimal } from "./index";
 describe("isNumberHasMoreThan2Decimal", () => {
   it("有超过", () => {
