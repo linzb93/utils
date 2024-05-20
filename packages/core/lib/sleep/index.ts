@@ -2,11 +2,15 @@
  * 延时函数
  * @async
  * @param {number} time 需要延长的时间
- * @return {Promise<void>}
+ * @return {Promise<number>}
  */
-export const sleep = (time: number): Promise<null> =>
-  new Promise((resolve) => {
+export const sleep = (time: number, isReject?: boolean): Promise<number> =>
+  new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve(null);
+      if (isReject) {
+        reject(time);
+      } else {
+        resolve(time);
+      }
     }, time);
   });

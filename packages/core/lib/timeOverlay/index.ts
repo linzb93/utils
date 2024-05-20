@@ -18,17 +18,27 @@ function sortTime(timeList: TimeRange[]): TimeRange[] {
   return timeList.reverse();
 }
 
-function isTimeOverlay(timeList: TimeRange[]): boolean {
-  return (
-    timeIsSmaller(timeList[0].startTime, timeList[1].endTime) &&
-    !timeIsSmaller(timeList[0].endTime, timeList[1].startTime)
-  );
+/**
+ * 判断两个时间段是否重叠，如有重叠，返回true。
+ * @param timeList: [{startTime, endTime}]，
+ * @param time: 形如'22:00'的
+ * @return {boolean} 是否存在重叠
+ */
+export function isTimeOverlay(timeList: TimeRange[]): boolean {
+  if (!timejs(timeList[0].endTime).isAfter(timeList[1].startTime)) {
+    return false;
+  }
+  if (!timejs(timeList[1].endTime).isAfter(timeList[0].startTime)) {
+    return false;
+  }
+  return true;
 }
 
 /**
- * 判断时间段是否重叠，如有重叠，返回true。
+ * 判断一组时间段是否重叠，如有重叠，返回true。
  * @param timeList: [{startTime, endTime}]，
  * @param time: 形如'22:00'的
+ * @return {boolean} 是否存在重叠
  */
 export function validateTimeOverlay(timeList: TimeRange[]): boolean {
   for (let i = 0; i < timeList.length - 1; i++) {

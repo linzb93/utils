@@ -1,4 +1,4 @@
-import {describe, it, expect} from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { fixContinuousNumber } from "./index";
 
 describe("fixContinuousNumber", () => {
