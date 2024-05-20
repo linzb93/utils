@@ -4,11 +4,12 @@ export function binarySearch(
   {
     start,
     end,
+    callback
   }: {
     start: number;
     end: number;
+    callback: (data: number) => boolean
   },
-  callback: (data: number) => boolean
 ) {
   if (!isInteger(start) || !isInteger(end) || start >= end) {
     throw new Error("start 和 end 必须是正整数，且 start 的值要小于 end");
@@ -19,13 +20,14 @@ export function binarySearch(
     return e;
   }
   while (e - s > 1) {
-    const ret1 = callback(parseInt(((s + e) / 2).toString()));
+    const middle = parseInt(((s + e) / 2).toString());
+    const ret1 = callback(middle);
     const ret2 = callback(e);
     const boolRet = ret1 === !ret2;
     if (boolRet) {
-      s = parseInt(((s + e) / 2).toString());
+      s = middle;
     } else {
-      e = parseInt(((s + e) / 2).toString());
+      e = middle;
     }
   }
   if (callback(s)) {
