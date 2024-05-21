@@ -15,6 +15,7 @@ jspm_packages/
 
 # TypeScript v1 declaration files
 typings/
+*.d.ts
 
 # dotenv environment variables file
 .env
