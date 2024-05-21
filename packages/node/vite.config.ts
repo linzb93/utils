@@ -1,4 +1,5 @@
 import { defineConfig } from "vitest/config";
+import dts from 'vite-plugin-dts';
 
 export default defineConfig({
   build: {
@@ -9,6 +10,12 @@ export default defineConfig({
       formats: ["es"],
     },
   },
+  plugins: [dts({
+    outDir: './',
+    entryRoot: './lib',
+    rollupTypes: true,
+    exclude: ['**/*.test.ts']
+  })],
   test: {
     onConsoleLog() {
       return true;

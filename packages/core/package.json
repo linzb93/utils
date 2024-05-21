@@ -21,7 +21,7 @@
     "url": "git+https://github.com/linzb93/utils.git"
   },
   "scripts": {
-    "build": "tsc & vite build"
+    "build": "tsc --declaration & vite build"
   },
   "bugs": {
     "url": "https://github.com/linzb93/utils/issues"

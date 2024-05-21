@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "L IN <linzb93@users.noreply.github.com>",
+  "private":"true",
   "homepage": "https://github.com/linzb93/utils#readme",
   "license": "ISC",
   "main": "dist/browser.js",

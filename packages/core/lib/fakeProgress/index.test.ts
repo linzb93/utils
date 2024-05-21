@@ -7,7 +7,7 @@ describe('fakeProgress', () => {
         const promise = sleep(3500);
         const resolveFn = vi.fn();
         const obs$ = fakeProgress(promise, 3);
-        const collected = [];
+        const collected: number[] = [];
         obs$.subscribe((data) => {
             collected.push(data);
         });

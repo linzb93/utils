@@ -3,6 +3,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "declaration": true,
+    "declarationDir": "./types",
     "experimentalDecorators": true,
     "allowImportingTsExtensions": true,
     "esModuleInterop": true,

@@ -1,1 +1,3 @@
-console.log(111);
+export function log() {
+    console.log(111);
+}
