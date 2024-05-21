@@ -8,7 +8,7 @@ lerna-debug.log*
 package-lock.json
 yarn.lock
 packages/**/*.d.ts
-
+.npmrc
 # Dependency directories
 node_modules/
 jspm_packages/
