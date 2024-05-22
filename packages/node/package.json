@@ -20,5 +20,6 @@
   },
   "scripts": {
     "build": "tsc --declaration & vite build"
-  }
+  },
+  "gitHead": "052732ea0135a4838beb12809dc169c0192dafa2"
 }
