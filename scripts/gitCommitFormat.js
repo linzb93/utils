@@ -31,13 +31,13 @@ const commitMap = [
     description: "构建过程或辅助工具的变动",
   },
 ];
-console.log(process.env);
 const commitMsgPath = process.argv[2];
 const commitMessage = fs.readFileSync(commitMsgPath, "utf8");
 if (
   !commitMap
     .map((cmt) => `${cmt.name}:`)
-    .find((cmt) => commitMessage.startsWith(cmt))
+    .find((cmt) => commitMessage.startsWith(cmt)) &&
+  process.env.npm_lifecycle_script !== "lerna"
 ) {
   // 格式不规范
   console.error("git commit 格式不规范，请参考下面的规范列表进行修改：");
