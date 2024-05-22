@@ -31,6 +31,7 @@ const commitMap = [
     description: "构建过程或辅助工具的变动",
   },
 ];
+console.log(process.env);
 const commitMsgPath = process.argv[2];
 const commitMessage = fs.readFileSync(commitMsgPath, "utf8");
 if (

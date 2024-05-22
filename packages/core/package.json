@@ -2,6 +2,7 @@
   "name": "@linzb93/core",
   "version": "0.0.1",
   "author": "linzb93",
+  "description": "我的工具库",
   "homepage": "https://github.com/linzb93/utils#readme",
   "license": "ISC",
   "main": "dist/index.js",
@@ -16,11 +17,7 @@
     "README.md"
   ],
   "publishConfig": {
-    "registry": "https://registry.npmmirror.com/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/linzb93/utils.git"
+    "access": "public"
   },
   "scripts": {
     "build": "tsc --declaration & vite build"
