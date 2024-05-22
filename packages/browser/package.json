@@ -1,5 +1,5 @@
 {
-  "name": "browser",
+  "name": "@linzb93/browser",
   "version": "0.0.13",
   "description": "我的工具库-Web端",
   "author": "linzb93",
@@ -22,5 +22,5 @@
     "build": "echo 123"
   },
   "type": "module",
-  "gitHead": "052732ea0135a4838beb12809dc169c0192dafa2"
+  "gitHead": "f95f525d619e9853a893700272e0a958fc8db4fc"
 }
