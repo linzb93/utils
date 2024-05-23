@@ -6,6 +6,7 @@
     "test": "vitest",
     "build": "lerna run build"
   },
+  "type": "module",
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^20.12.12",

@@ -133,6 +133,14 @@ export declare const isEmptyObject: (obj: any) => boolean;
  */
 export declare const isNumberHasMoreThan2Decimal: (value: number) => boolean;
 
+/**
+ * 判断两个时间段是否重叠，如有重叠，返回true。
+ * @param timeList: [{startTime, endTime}]，
+ * @param time: 形如'22:00'的
+ * @return {boolean} 是否存在重叠
+ */
+export declare function isTimeOverlay(timeList: TimeRange[]): boolean;
+
 declare interface IValidate {
     [key: string]: (str: string) => boolean;
 }
@@ -168,8 +176,6 @@ declare class TimeCtor {
     isSame(comparedTime: string): boolean;
     isInRange(startTime: string, endTime: string): boolean;
 }
-
-export declare function timeIsSmaller(time0: string, time1: string): boolean;
 
 export declare function timejs(time: string): TimeCtor;
 

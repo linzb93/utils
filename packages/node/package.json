@@ -3,6 +3,7 @@
   "version": "0.0.14",
   "description": "我的工具库-Node端",
   "author": "linzb93",
+  "private":true,
   "homepage": "https://github.com/linzb93/utils#readme",
   "license": "ISC",
   "main": "dist/index.js",
