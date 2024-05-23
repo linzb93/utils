@@ -1,6 +1,6 @@
 import { timejs } from "../timejs/index";
 // 时间比大小，时间格式是mm:ss类型的。
-export function timeIsSmaller(time0: string, time1: string): boolean {
+function timeIsSmaller(time0: string, time1: string): boolean {
   return timejs(time0).isBefore(time1);
 }
 

@@ -7,6 +7,6 @@ export { fixContinuousNumber } from "./fixContinuousNumber/index";
 export { isEmptyObject } from "./isEmptyObject/index";
 export { isNumberHasMoreThan2Decimal } from "./isNumberHasMoreThan2Decimal/index";
 export { fakeProgress } from "./fakeProgress/index";
-export { timeIsSmaller, validateTimeOverlay } from "./timeOverlay/index";
+export { isTimeOverlay, validateTimeOverlay } from "./timeOverlay/index";
 export { timejs } from "./timejs/index";
 export { formatWeekCircle } from "./formatWeekCircle/index";
