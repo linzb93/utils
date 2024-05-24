@@ -35,12 +35,14 @@ export default defineConfig({
       formats: ["es"],
     },
   },
-  plugins: [dts({
-    outDir: './',
-    entryRoot: './lib',
-    rollupTypes: true,
-    exclude: ['**/*.test.ts']
-  })],
+  plugins: [
+    dts({
+      outDir: './',
+      entryRoot: './lib',
+      rollupTypes: true,
+      exclude: ['**/*.test.ts']
+    })
+  ],
   test: {
     onConsoleLog() {
       return true;
