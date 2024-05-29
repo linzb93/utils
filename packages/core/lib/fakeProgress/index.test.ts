@@ -34,6 +34,6 @@ describe('fakeProgress', () => {
             interval: 100
         });
         expect(rejectFn).toHaveBeenCalledTimes(1);
-        expect(rejectFn).toHaveBeenCalledWith(3500)
+        expect(rejectFn).toHaveBeenCalledWith('3500');
     });
 });
