@@ -20,6 +20,7 @@ interface IResult {
  * @returns {object} callbacks
  * @returns {Function} [callbacks.subscribe] - 进行中的回调
  * @returns {Function} [callbacks.then] - 完成的回调
+ * @returns {Function} [callbacks.catch] - 失败的回调
  */
 export const fakeProgress = (pEvent: Promise<any>, second: number): IResult => {
   let progress = 0;
