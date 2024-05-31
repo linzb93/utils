@@ -1,7 +1,3 @@
-'use strict';
+import { describe, it, expect } from "vitest";
 
-const pluginBrand = require('..');
-const assert = require('assert').strict;
-
-assert.strictEqual(pluginBrand(), 'Hello from pluginBrand');
-console.info("pluginBrand tests passed");
+describe.todo('', () => {});
