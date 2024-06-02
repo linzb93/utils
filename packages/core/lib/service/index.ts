@@ -1,44 +1,26 @@
-import axios, {AxiosRequestConfig, AxiosResponse, AxiosRequestHeaders} from "axios";
+import axios, {
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosRequestHeaders,
+  AxiosAdapter,
+} from "axios";
 import { statusMap, isProd } from "./utils/constant";
 
-import once from "lodash/once";
+import { once } from "lodash-es";
 import track, { setBeginTime } from "./plugins/track";
 import errorHandler from "./interceptors/errorHandler";
 import adapterFn from "./adapter";
 import { sleep } from "..";
 import { logger } from "./utils";
-import {IToast, ILoading, AnyObject} from './types';
+import {
+  IToast,
+  ILoading,
+  AnyObject,
+  ISingleOptions,
+  IGlobalOptions,
+} from "./types";
 
-interface IGlobalOptions {
-  baseURL: string;
-  timeout?: number;
-  logApiError?: boolean;
-  loginAddr?: string;
-  enhanceHeaders: (configData: AxiosRequestConfig, url: string) => AnyObject,
-  cachePair?: {
-    get: string;
-    set: string;
-  }[];
-  getToken?: () => string;
-  listeners?: {
-    tokenInvalid: (data: AxiosResponse['data']) => void;
-    success: (data: AxiosResponse['data'], headers: AxiosRequestHeaders) => void;
-    authDeny: (data: AxiosResponse['data'], headers: AxiosRequestHeaders) => void;
-    error: (res: AxiosResponse) => void;
-  }
-}
-
-interface ISingleOptions {
-  noLoading: boolean;
-  noToast: boolean;
-  ignoreToken: boolean;
-  cache: boolean;
-  loadingText: string;
-  catchImmediately: boolean;
-}
-
-
-export default ({ Toast, loading }: {Toast: IToast, loading: ILoading}) => {
+export default ({ Toast, loading }: { Toast: IToast; loading: ILoading }) => {
   return function (optionsParam: IGlobalOptions) {
     const defaultOptions = {
       baseURL: "",
@@ -54,8 +36,8 @@ export default ({ Toast, loading }: {Toast: IToast, loading: ILoading}) => {
         return localStorage.getItem("token");
       },
     };
-    const options = { ...defaultOptions, ...optionsParam };
-    const adapter = adapterFn(options);
+    const options = { ...defaultOptions, ...optionsParam } as IGlobalOptions;
+    const adapter = adapterFn(options) as unknown as AxiosAdapter;
     const serviceInstance = axios.create({
       baseURL: options.baseURL,
       timeout: options.timeout,
@@ -78,15 +60,15 @@ export default ({ Toast, loading }: {Toast: IToast, loading: ILoading}) => {
        */
       const { _config } = config;
       config.data = config.data || {};
-      let url = config.url;
-      url = url.includes("http") ? url : config.baseURL + url;
+      let url = config.url as string;
+      url = url.includes("http") ? url : (config.baseURL as string) + url;
       // 对headers的补充，例如加上加密数据
       let supplementHeaders = {};
       if (typeof options.enhanceHeaders === "function") {
         try {
           supplementHeaders = options.enhanceHeaders(config.data, url);
         } catch (error) {
-          logger.error(`enhanceHeaders error: ${error.message}`);
+          logger.error(`enhanceHeaders error: ${(error as Error).message}`);
         }
       }
       config.headers = {

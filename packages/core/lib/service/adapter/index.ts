@@ -1,21 +1,13 @@
 import axios from "axios";
-// import dataset from "../utils/dataset";
 import { enhanceResponse } from "../utils";
 import { statusMap } from "../utils/constant";
-/**
- * 缓存方案：
- * 单一接口缓存：在_config中设置cache: true
- * 多关联接口缓存：全局参数添加字段`cachePair`,这样的话只有第一次调用get接口，以及调用set接口后的第一次调用get接口才会发送请求，其他时候都是使用缓存。
- * 结构如下：
- * [
-      {
-        get: "/api/get",
-        set: "/api/set"
-      }
-    ]
- */
+import { IGlobalOptions, JoinCustomizedConfig, IAdapter } from "../types";
+
 const cachesMap = new Map();
-export default (options) => {
+
+type GenerateAdapter = (options: IGlobalOptions) => IAdapter;
+
+const adapterFn: GenerateAdapter = (options) => {
   /**
    * Axios的adapter是处于request拦截器和response拦截器中间的功能。当Axios收到请求后，先遍历所有的request拦截器，然后再进入adapter，此时才是由客户端向服务端发送请求，收到返回数据后遍历response拦截器，最后返回给业务代码调用Axios的地方。
    */
@@ -32,7 +24,8 @@ export default (options) => {
       let err = null; // 接口报错
       for (; i <= retryTotal; i++) {
         try {
-          response = await axios.defaults.adapter(config);
+          const adapter = axios.defaults.adapter as IAdapter;
+          response = await adapter(config);
           const responseCode = response.data.code;
           if (
             [
@@ -80,7 +73,10 @@ export default (options) => {
 };
 
 // 是否需要从缓存中读取，无需请求接口
-function needGetDataFromCache(options, config) {
+function needGetDataFromCache(
+  options: IGlobalOptions,
+  config: JoinCustomizedConfig
+) {
   const { _config, url } = config;
   if (_config && _config.cache) {
     return cachesMap.has(url);
@@ -91,3 +87,4 @@ function needGetDataFromCache(options, config) {
   }
   return cachePair.find((item) => item.get === url);
 }
+export default adapterFn;
