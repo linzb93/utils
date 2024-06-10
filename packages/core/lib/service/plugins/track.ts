@@ -1,13 +1,8 @@
 // 错误信息记录到日志管理系统，只在生产环境使用
-import {
-  AxiosRequestConfig,
-  AxiosResponse,
-  AxiosError,
-  AxiosRequestHeaders,
-} from "axios";
+import { InternalAxiosRequestConfig } from "axios";
 import { statusMap, isProd } from "../utils/constant";
 import { logger, getErrorType } from "../utils";
-import { ISingleOptions } from "../types";
+import { WrapInterceptersParams } from "../types";
 
 interface DzPointUtil {
   push(params: SendParams): void;
@@ -29,10 +24,8 @@ interface SendParams {
 
 // 记录接口的调用开始时间
 export function setBeginTime(
-  config: AxiosRequestConfig & {
-    beginTime: number;
-  }
-) {
+  config: InternalAxiosRequestConfig & { beginTime: number }
+): InternalAxiosRequestConfig & { beginTime: number } {
   config.beginTime = new Date().getTime();
   return config;
 }
@@ -44,26 +37,13 @@ function track(params: SendParams) {
   }
 }
 
-interface SuccessParams extends AxiosResponse {
-  config: {
-    beginTime: number;
-    url: string;
-    _config: any;
-    headers: AxiosRequestHeaders;
-  };
-}
-
-interface ErrorParams extends AxiosError {}
-
-type WrapInterceptersParams = SuccessParams & ErrorParams;
-
 export default (type: "resolve" | "reject") =>
   (params: WrapInterceptersParams) => {
     // resolve -> response
     // reject -> error
     const { _config } = params.config;
     // 只有dkd-service开发或者生产环境才能进入
-    if (!isProd() || (_config && _config.cacheImmediately)) {
+    if (!isProd() || (_config && _config.catchImmediately)) {
       if (type === "resolve") {
         return params;
       } else if (type === "reject") {
@@ -201,7 +181,7 @@ export default (type: "resolve" | "reject") =>
       }
     }
     if (type === "resolve") {
-      return params;
+      return Promise.resolve(params);
     }
     return Promise.reject(params);
   };

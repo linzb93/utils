@@ -4,19 +4,25 @@ import {
   AxiosRequestHeaders,
   InternalAxiosRequestConfig,
   AxiosPromise,
+  RawAxiosResponseHeaders,
+  AxiosError,
 } from "axios";
 
-type NoopFn = () => {};
+type NoopFn = () => void;
 
-export interface IToast {
+interface ToastOptions {
   type?: "error";
   message: string;
-  duration: number;
-  onClose: NoopFn;
+  duration?: number;
+  onClose?: NoopFn;
+}
+
+export interface IToast {
+  (options: ToastOptions): void;
 }
 
 export interface ILoading {
-  open(text: string): void;
+  open(text?: string): void;
   close: NoopFn;
 }
 
@@ -45,19 +51,19 @@ export interface IGlobalOptions {
   baseURL: string;
   timeout?: number;
   logApiError?: boolean;
-  loginAddr?: string;
+  loginaddr?: string;
   enhanceHeaders: (configData: AxiosRequestConfig, url: string) => AnyObject;
   cachePair?: CachePair[];
   getToken?: () => string;
   listeners?: {
-    tokenInvalid: (data: AxiosResponse["data"]) => void;
+    tokenInvalid: (data: AxiosResponse["data"]) => void | boolean;
     success: (
       data: AxiosResponse["data"],
-      headers: AxiosRequestHeaders
+      headers: RawAxiosResponseHeaders
     ) => void;
     authDeny: (
       data: AxiosResponse["data"],
-      headers: AxiosRequestHeaders
+      headers: RawAxiosResponseHeaders
     ) => void;
     error: (res: AxiosResponse) => void;
   };
@@ -77,3 +83,15 @@ export type JoinCustomizedConfig = InternalAxiosRequestConfig & {
 export interface IAdapter {
   (config: JoinCustomizedConfig): AxiosPromise;
 }
+
+export interface SuccessParams extends AxiosResponse {
+  config: {
+    beginTime: number;
+    url: string;
+    _config: ISingleOptions;
+    headers: AxiosRequestHeaders;
+  };
+}
+interface ErrorParams extends AxiosError {}
+
+export type WrapInterceptersParams = SuccessParams & ErrorParams;

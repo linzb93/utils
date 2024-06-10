@@ -1,9 +1,4 @@
-import axios, {
-  AxiosRequestConfig,
-  AxiosResponse,
-  AxiosRequestHeaders,
-  AxiosAdapter,
-} from "axios";
+import axios, { AxiosAdapter, InternalAxiosRequestConfig } from "axios";
 import { statusMap, isProd } from "./utils/constant";
 
 import { once } from "lodash-es";
@@ -15,9 +10,9 @@ import { logger } from "./utils";
 import {
   IToast,
   ILoading,
-  AnyObject,
-  ISingleOptions,
   IGlobalOptions,
+  JoinCustomizedConfig,
+  WrapInterceptersParams,
 } from "./types";
 
 export default ({ Toast, loading }: { Toast: IToast; loading: ILoading }) => {
@@ -45,7 +40,11 @@ export default ({ Toast, loading }: { Toast: IToast; loading: ILoading }) => {
     });
     // --------- request 请求拦截器 ---------
     if (options.logApiError) {
-      serviceInstance.interceptors.request.use(setBeginTime);
+      serviceInstance.interceptors.request.use((config) => {
+        return setBeginTime(
+          config as InternalAxiosRequestConfig & { beginTime: number }
+        );
+      });
     }
     serviceInstance.interceptors.request.use((config) => {
       /**
@@ -58,7 +57,7 @@ export default ({ Toast, loading }: { Toast: IToast; loading: ILoading }) => {
        * - loadingText: loading的文字
        * - cacheImmediately: 立即捕获，不进入监控系统及后续处理
        */
-      const { _config } = config;
+      const { _config } = config as JoinCustomizedConfig;
       config.data = config.data || {};
       let url = config.url as string;
       url = url.includes("http") ? url : (config.baseURL as string) + url;
@@ -71,10 +70,7 @@ export default ({ Toast, loading }: { Toast: IToast; loading: ILoading }) => {
           logger.error(`enhanceHeaders error: ${(error as Error).message}`);
         }
       }
-      config.headers = {
-        ...config.headers,
-        ...supplementHeaders,
-      };
+      Object.assign(config.headers, supplementHeaders);
       // token可以是接口独有的，或者全局通用的。
       let token = config.headers.token;
 
@@ -82,9 +78,11 @@ export default ({ Toast, loading }: { Toast: IToast; loading: ILoading }) => {
         token = "";
       } else if (!token) {
         try {
-          token = options.getToken();
+          if (typeof options.getToken === "function") {
+            token = options.getToken();
+          }
         } catch (error) {
-          console.log(`service getToken error: ${error.message}`);
+          console.log(`service getToken error: ${(error as Error).message}`);
         }
       }
       config.headers.token = token;
@@ -122,7 +120,7 @@ export default ({ Toast, loading }: { Toast: IToast; loading: ILoading }) => {
     // 第一步，关掉loading
     serviceInstance.interceptors.response.use(
       (res) => {
-        const { _config } = res.config;
+        const { _config } = res.config as JoinCustomizedConfig;
         if (!_config || !_config.noLoading) {
           loading.close();
         }
@@ -136,15 +134,14 @@ export default ({ Toast, loading }: { Toast: IToast; loading: ILoading }) => {
     );
     // 第二步，引入监控系统
     if (options.logApiError) {
-      serviceInstance.interceptors.response.use(
-        track("resolve"),
-        track("reject")
-      );
+      serviceInstance.interceptors.response.use((response) => {
+        return track("resolve")(response as WrapInterceptersParams);
+      }, track("reject"));
     }
     // 第三步，处理其他逻辑
     serviceInstance.interceptors.response.use(
       (res) => {
-        const { _config } = res.config;
+        const { _config } = res.config as JoinCustomizedConfig;
         if (
           ![
             statusMap.SUCCESS,
@@ -152,7 +149,7 @@ export default ({ Toast, loading }: { Toast: IToast; loading: ILoading }) => {
             statusMap.AUTH_DENY,
           ].includes(res.data.code) &&
           _config &&
-          _config.cacheImmediately
+          _config.catchImmediately
         ) {
           return Promise.reject(res);
         }
@@ -169,15 +166,15 @@ export default ({ Toast, loading }: { Toast: IToast; loading: ILoading }) => {
         // token失效的处理过了，就直接返回
         if (res.data.code === statusMap.NOTLOGIN) {
           tokenInvalidCallbackOnce(res);
-          return Promise.reject(res.data.msg, res.data);
+          return Promise.reject(res.data);
         }
         // 店客多项目正常的接口都会返回result字段，如果没有的话就是接口有问题。也有可能是接口http result code就不是200
         if (res.data && "result" in res.data === false) {
           if (res.data.code === statusMap.AUTH_DENY) {
             options.listeners &&
               typeof options.listeners.authDeny === "function" &&
-              options.authDeny(res.data);
-            return Promise.reject(res.data.msg, res.data);
+              options.listeners.authDeny(res.data, res.headers);
+            return Promise.reject(res.data);
           }
           logger.error(
             `接口<strong>${res.config.url}</strong>没有返回result字段`
@@ -193,16 +190,14 @@ export default ({ Toast, loading }: { Toast: IToast; loading: ILoading }) => {
         if (res.data.code === statusMap.AUTH_DENY) {
           options.listeners &&
             typeof options.listeners.authDeny === "function" &&
-            options.authDeny(res.data);
-          return Promise.reject(res.data.msg, res.data);
+            options.listeners.authDeny(res.data, res.headers);
+          return Promise.reject(res.data.msg);
         }
         // 接口返回成功
         if (res.data.code === statusMap.SUCCESS) {
-          if (typeof options.resolve === "function") {
-            options.listeners &&
-              typeof options.listeners.success === "function" &&
-              options.success(res.data.result, res.config.headers);
-          }
+          options.listeners &&
+            typeof options.listeners.success === "function" &&
+            options.listeners.success(res.data.result, res.config.headers);
           return res.data.result;
         }
         // 其他报错
