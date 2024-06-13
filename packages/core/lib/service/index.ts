@@ -1,37 +1,50 @@
-import axios, { AxiosAdapter, InternalAxiosRequestConfig } from "axios";
-import { statusMap, isProd } from "./utils/constant";
-
+import axios, { AxiosAdapter } from "axios";
 import { once } from "lodash-es";
 import track, { setBeginTime } from "./plugins/track";
 import errorHandler from "./interceptors/errorHandler";
 import adapterFn from "./adapter";
 import { sleep } from "..";
 import { logger } from "./utils";
+import { isProd } from "./utils/constant";
+import httpCodeUtils from "./utils/httpCode";
 import {
   IToast,
   ILoading,
   IGlobalOptions,
   JoinCustomizedConfig,
   WrapInterceptersParams,
+  HttpCodeMap
 } from "./types";
 
 export default ({ Toast, loading }: { Toast: IToast; loading: ILoading }) => {
   return function (optionsParam: IGlobalOptions) {
-    const defaultOptions = {
+    const defaultOptions: IGlobalOptions = {
       baseURL: "",
       timeout: 1500,
       logApiError: true,
       loginaddr: "",
-      enhanceHeaders() {},
+      retry: 0,
+      enhanceHeaders(data, url) {
+        return {}
+      },
       listeners: {
-        tokenInvalid() {},
-        success() {},
+        tokenInvalid() { },
+        success(data, headers) { },
+        authDeny(data, headers) { },
+        error(res) { },
       },
       getToken() {
-        return localStorage.getItem("token");
+        return localStorage.getItem("token") as string;
       },
+      configureHttpCode() {
+        return {} as HttpCodeMap
+      }
     };
     const options = { ...defaultOptions, ...optionsParam } as IGlobalOptions;
+    // 配置http code
+    if (typeof optionsParam.configureHttpCode === 'function') {
+      httpCodeUtils.configure(optionsParam.configureHttpCode());
+    }
     const adapter = adapterFn(options) as unknown as AxiosAdapter;
     const serviceInstance = axios.create({
       baseURL: options.baseURL,
@@ -42,21 +55,11 @@ export default ({ Toast, loading }: { Toast: IToast; loading: ILoading }) => {
     if (options.logApiError) {
       serviceInstance.interceptors.request.use((config) => {
         return setBeginTime(
-          config as InternalAxiosRequestConfig & { beginTime: number }
+          config as JoinCustomizedConfig
         );
       });
     }
     serviceInstance.interceptors.request.use((config) => {
-      /**
-       * 与axios请求无关的配置，不会带给服务端的。写在`config`的`_config`属性里面。
-       * `config`包含下列属性：
-       * - noLoading: 请求过程中不显示loading图标
-       * - noToast: 请求失败后不显示错误提醒
-       * - ignoreToken: 该接口的headers不需要携带token
-       * - cache: 缓存接口
-       * - loadingText: loading的文字
-       * - cacheImmediately: 立即捕获，不进入监控系统及后续处理
-       */
       const { _config } = config as JoinCustomizedConfig;
       config.data = config.data || {};
       let url = config.url as string;
@@ -144,9 +147,9 @@ export default ({ Toast, loading }: { Toast: IToast; loading: ILoading }) => {
         const { _config } = res.config as JoinCustomizedConfig;
         if (
           ![
-            statusMap.SUCCESS,
-            statusMap.NOTLOGIN,
-            statusMap.AUTH_DENY,
+            httpCodeUtils.get('SUCCESS'),
+            httpCodeUtils.get('NOTLOGIN'),
+            httpCodeUtils.get('AUTH_DENY')
           ].includes(res.data.code) &&
           _config &&
           _config.catchImmediately
@@ -164,37 +167,19 @@ export default ({ Toast, loading }: { Toast: IToast; loading: ILoading }) => {
           return Promise.reject("网络错误，请重试");
         }
         // token失效的处理过了，就直接返回
-        if (res.data.code === statusMap.NOTLOGIN) {
+        if (res.data.code === httpCodeUtils.get('NOTLOGIN')) {
           tokenInvalidCallbackOnce(res);
           return Promise.reject(res.data);
         }
-        // 店客多项目正常的接口都会返回result字段，如果没有的话就是接口有问题。也有可能是接口http result code就不是200
-        if (res.data && "result" in res.data === false) {
-          if (res.data.code === statusMap.AUTH_DENY) {
-            options.listeners &&
-              typeof options.listeners.authDeny === "function" &&
-              options.listeners.authDeny(res.data, res.headers);
-            return Promise.reject(res.data);
-          }
-          logger.error(
-            `接口<strong>${res.config.url}</strong>没有返回result字段`
-          );
-          Toast({
-            type: "error",
-            message: "网络错误，请重试",
-            duration: 1500,
-          });
-          return Promise.reject("网络错误，请重试");
-        }
         // 无权限访问
-        if (res.data.code === statusMap.AUTH_DENY) {
+        if (res.data.code === httpCodeUtils.get('AUTH_DENY')) {
           options.listeners &&
             typeof options.listeners.authDeny === "function" &&
             options.listeners.authDeny(res.data, res.headers);
           return Promise.reject(res.data.msg);
         }
         // 接口返回成功
-        if (res.data.code === statusMap.SUCCESS) {
+        if (res.data.code === httpCodeUtils.get('SUCCESS')) {
           options.listeners &&
             typeof options.listeners.success === "function" &&
             options.listeners.success(res.data.result, res.config.headers);
