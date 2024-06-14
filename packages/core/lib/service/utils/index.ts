@@ -5,10 +5,10 @@ import { AxiosError, InternalAxiosRequestConfig } from "axios";
  * @returns {string}
  */
 export const getErrorType = (error: AxiosError) => {
-  if (error.message.endsWith("code 404")) {
+  if (error.message && error.message.endsWith("code 404")) {
     return "not found";
   }
-  if (error.message.startsWith("timeout")) {
+  if (error.message && error.message.startsWith("timeout")) {
     return "timeout";
   }
   if (!error || !error.response) {
@@ -40,7 +40,13 @@ export const logger = {
   },
 };
 
-export const enhanceResponse = (
+/**
+ * 将缓存的数据包装成Axios Response
+ * @param result 
+ * @param config 
+ * @returns 
+ */
+export const packToAxiosRespsonseLike = (
   result: any,
   config: InternalAxiosRequestConfig
 ) => {

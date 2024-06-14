@@ -1,13 +1,12 @@
 import axios from "axios";
-import { enhanceResponse } from "../utils";
+import { packToAxiosRespsonseLike } from "../utils";
 import httpCodeUtils from "../utils/httpCode";
 import { IGlobalOptions, JoinCustomizedConfig, IAdapter } from "../types";
 
+// 存放接口返回的cache
 const cachesMap = new Map();
 
-type GenerateAdapter = (options: IGlobalOptions) => IAdapter;
-
-const adapterFn: GenerateAdapter = (options) => {
+const adapterFn: (options: IGlobalOptions) => IAdapter = (options) => {
   /**
    * Axios的adapter是处于request拦截器和response拦截器中间的功能。
    * 当Axios收到请求后，先遍历所有的request拦截器，然后再进入adapter，此时才是由客户端向服务端发送http请求。
@@ -17,8 +16,8 @@ const adapterFn: GenerateAdapter = (options) => {
     const { _config, url } = config;
     const { cachePair } = options;
     const cacheKey = generateCacheKey(url as string, config.method as string, config.data);
-    if (needGetDataFromCache(options, config) && cachesMap.has(cacheKey)) {
-      return Promise.resolve(enhanceResponse(cachesMap.get(url), config));
+    if (needGetDataFromCache(options, config, cacheKey)) {
+      return Promise.resolve(packToAxiosRespsonseLike(cachesMap.get(cacheKey), config));
     }
     return new Promise(async (resolve, reject) => {
       const retryTotal = (() => {
@@ -73,7 +72,7 @@ const adapterFn: GenerateAdapter = (options) => {
             cachesMap.delete(matchSet.get);
           }
           const matchGet = cachePair.find((item) => item.get === url);
-          if (matchGet && resData && "result" in resData) {
+          if (matchGet && resData) {
             cachesMap.set(url, resData.result);
           }
         }
@@ -95,11 +94,12 @@ function generateCacheKey(url:string, method: string, body: object):string {
 // 是否需要从缓存中读取，无需请求接口
 function needGetDataFromCache(
   options: IGlobalOptions,
-  config: JoinCustomizedConfig
+  config: JoinCustomizedConfig,
+  cacheKey: string
 ) {
   const { _config, url } = config;
   if (_config && _config.cache) {
-    return true;
+    return cachesMap.has(cacheKey);
   }
   const { cachePair } = options;
   if (!cachePair || !Array.isArray(cachePair) || !cachePair.length) {
