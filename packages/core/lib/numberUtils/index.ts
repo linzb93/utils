@@ -25,7 +25,7 @@ export function fix0(data: any): string {
  * @return {string} 截断后的数字，不做四舍五入。
  * @example
  * cutDecimal(2.4599999)
- * return 2.45
+ * return '2.45'
  */
 export function cutDecimal(num: number, digit: number = 2): string {
     if (isNil(num)) {
