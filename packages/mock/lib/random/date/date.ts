@@ -1,6 +1,6 @@
-const dayjs = require("dayjs");
+import dayjs from "dayjs";
 
-module.exports = (...args) => {
+export default (...args: any[]) => {
   if (args.length === 0) {
     return dayjs(parseInt(Math.random() * 1e10)).toDate();
   } else if (args.length === 1) {

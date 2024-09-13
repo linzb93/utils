@@ -9,4 +9,4 @@
  *
  * "data|tree.3" 表示最多嵌套三层，默认5层。
  */
-module.exports = () => {};
+export default () => {};

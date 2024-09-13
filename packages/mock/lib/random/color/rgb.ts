@@ -1,4 +1,4 @@
-module.exports = (useOpacity) => {
+export default (useOpacity: boolean) => {
   if (useOpacity === true) {
     const opacity = Math.random().toFixed(2);
     return `rgba(${getRandom()},${getRandom()},${getRandom()},${opacity})`;

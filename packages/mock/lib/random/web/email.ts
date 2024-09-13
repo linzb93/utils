@@ -1,6 +1,6 @@
-const { sample } = require("../../utils");
+import { sample } from "../../shared";
 
-module.exports = (serve) => {
+export default (serve: string) => {
   const prefix = "";
   if (serve) {
     return `${prefix}@${serve}.com`;
