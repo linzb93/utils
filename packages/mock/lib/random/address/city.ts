@@ -1,11 +1,11 @@
-const addrData = require("./address_ch.json");
-const { sample } = require("../../utils");
+import addrData from "./address_ch.json";
+import { sample } from '../../shared';
 /**
  *
  * @param {Boolean | String} args 是否同时显示完整 | 指定省份下的城市
  * @returns string
  */
-module.exports = (...args) => {
+module.exports = (...args:any[]) => {
   const isFull =
     (args.length === 1 && args[0] === true) ||
     (args.length === 2 && args[1] === true);

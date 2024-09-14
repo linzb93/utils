@@ -7,6 +7,6 @@ export default (useOpacity: boolean) => {
 };
 
 function getRandom() {
-  const data = parseInt(Math.random()) * 256;
+  const data = parseInt((Math.random() * 256).toString());
   return data === 256 ? 255 : data;
 }
