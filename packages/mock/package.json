@@ -20,7 +20,7 @@
     "registry": "https://registry.npmmirror.com/"
   },
   "scripts": {
-    "test": "jest"
+    "test": "vitest"
   },
   "dependencies": {
     "@linzb93/utils": "^0.0.14",
