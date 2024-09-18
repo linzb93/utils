@@ -5,4 +5,7 @@ import { repeat } from "../../shared";
  * @example
  * '@char'
  */
-export default () => repeat(2, 1);
+export default {
+  name: "char",
+  serve: () => repeat(2, 1),
+};

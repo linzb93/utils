@@ -1,12 +1,18 @@
-export default (useOpacity: boolean) => {
-  if (useOpacity === true) {
-    const opacity = Math.random().toFixed(2);
-    return `rgba(${getRandom()},${getRandom()},${getRandom()},${opacity})`;
-  }
-  return `rgb(${getRandom()},${getRandom()},${getRandom()})`;
+import integer from "../basic/integer";
+/**
+ * 生成rgb格式的颜色，含透明度
+ */
+export default {
+  name: "rgb",
+  serve: (useOpacity: boolean) => {
+    if (useOpacity === true) {
+      const opacity = (integer.serve(0, 100) / 100).toFixed(2);
+      return `rgba(${getRandom()},${getRandom()},${getRandom()},${opacity})`;
+    }
+    return `rgb(${getRandom()},${getRandom()},${getRandom()})`;
+  },
 };
 
 function getRandom() {
-  const data = parseInt((Math.random() * 256).toString());
-  return data === 256 ? 255 : data;
+  return integer.serve(0, 255);
 }

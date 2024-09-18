@@ -1,16 +1,14 @@
-const nameData = require("./name.json");
-const { sample } = require("../../utils");
-module.exports = (first, length) => {
-  if (first) {
-    if (length) {
-      if (length - first.length <= 0) {
-        return "";
-      }
-      return `${first}${sample(
-        nameData.clast.filter((name) => length - first.length === name.length)
-      )}`;
+import cfirst from "./cfirst";
+import clast from "./clast";
+/**
+ * 生成中文全名，可以指定姓氏
+ */
+export default {
+  name: "cname",
+  serve: (first: string, length: number) => {
+    if (first) {
+      return `${first}${clast.serve(length)}`;
     }
-    return `${first}${sample(nameData.clast)}`;
-  }
-  return `${sample(nameData.cfirst)}${sample(nameData.clast)}`;
+    return `${cfirst.serve()}${clast.serve(length)}`;
+  },
 };

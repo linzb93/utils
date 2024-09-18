@@ -1,5 +1,11 @@
-const { sample } = require("../../utils");
-const addrData = require("./address_ch.json");
-module.exports = () => {
-  return sample(Object.keys(addrData));
+import addrData from "./dict.json";
+import { sample } from "lodash-es";
+/**
+ * 随机生成一个六位数邮政编码
+ */
+export default {
+  name: "zip",
+  serve: () => {
+    return sample(Object.keys(addrData));
+  },
 };

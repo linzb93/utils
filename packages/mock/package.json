@@ -1,6 +1,7 @@
 {
   "name": "@linzb93/mock",
   "version": "0.0.1",
+  "type": "module",
   "description": "mockjs",
   "keywords": [
     "mockjs"

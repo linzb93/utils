@@ -1,7 +1,11 @@
-export default () => {
-  return `${getData()}.${getData()}.${getData()}.${getData()}`;
+import integer from "../basic/integer";
+export default {
+  name: "ip",
+  serve: () => {
+    return `${getData()}.${getData()}.${getData()}.${getData()}`;
+  },
 };
 
 function getData() {
-  return parseInt(Math.random() * 256);
+  return integer.serve(0, 255);
 }

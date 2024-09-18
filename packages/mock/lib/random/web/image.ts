@@ -1,3 +1,6 @@
-export default (size: string) => {
-  return `http://dummyimage.com/${size}`;
+export default {
+  name: "image",
+  serve: (size: string) => {
+    return `http://dummyimage.com/${size}`;
+  },
 };

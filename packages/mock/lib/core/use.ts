@@ -1,7 +1,16 @@
-type PluginType = (value: string, length: number) => string;
+import type { BasicType } from "../types";
+
+type PluginType = (...args: any[]) => BasicType;
 export const database: {
   [key: string]: PluginType;
 } = {};
-export default function (name: string, plugin: PluginType) {
-  database[name] = plugin;
+
+interface MockPlugin {
+  name: string;
+  serve: PluginType;
+}
+
+export default function (plugin: MockPlugin) {
+  const { name, serve } = plugin;
+  database[name] = serve;
 }

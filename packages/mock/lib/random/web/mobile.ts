@@ -1,9 +1,9 @@
-import { sample } from "../../shared";
-export default () => {
-  const prefix = sample([13, 15, 18]);
-  let ret = prefix.toString();
-  for (let i = 0; i < 9; i++) {
-    ret += parseInt(Math.random() * 10);
-  }
-  return Number(ret);
+import { sample } from "lodash-es";
+import { repeatNumber } from "../../shared";
+export default {
+  name: "mobile",
+  serve: () => {
+    const prefix = sample([13, 15, 18]);
+    return Number(`${prefix}${repeatNumber(9)}`);
+  },
 };
